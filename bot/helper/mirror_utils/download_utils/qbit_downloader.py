@@ -158,7 +158,18 @@ class QbitTorrent:
                 if STOP_DUPLICATE and not self.listener.isLeech and not self.dupchecked and os.path.isdir(f'{self.dire}'):
                     LOGGER.info('Checking File/Folder if already in Drive')
                     qbname = str(os.listdir(f'{self.dire}')[0])
-                    if qbname.endswith('.!qB'):
+                    if filee.endswith(('.!qB', '.txt', '.ink', '.html', '.url')):
+                                os.remove(os.path.join(dirpath, filee))
+                        for folder in subdir:
+                            if folder == ".unwanted":
+                                shutil.rmtree(os.path.join(dirpath, folder))
+                    for dirpath, subdir, files in os.walk(f"{self.dire}", topdown=False):
+                        if not os.listdir(dirpath):
+                            os.rmdir(dirpath)
+                if not self.qbitsel:
+                    for dirpath, subdir, files in os.walk(f"{self.dire}", topdown=False):
+                        for filee in files:
+                            if filee.endswith(('.txt', '.ink', '.html', '.url')):
                         qbname = os.path.splitext(qbname)[0]
                     if self.listener.isZip:
                         qbname = qbname + ".zip"
